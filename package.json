@@ -1,0 +1,25 @@
+{
+  "name": "node-prolog",
+  "version": "0.0.1",
+  "description": "Prolog-like interpreter for nodejs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hikalium/node-prolog.git"
+  },
+  "keywords": [
+    "prolog"
+  ],
+  "author": "hikalium",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hikalium/node-prolog/issues"
+  },
+  "homepage": "https://github.com/hikalium/node-prolog#readme",
+  "dependencies": {
+    "@types/node": "^8.0.31"
+  }
+}

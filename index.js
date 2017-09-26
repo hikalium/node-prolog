@@ -1,21 +1,3 @@
-var rule = [
-    [["parent", "pam", "bob"]],
-    [["parent", "tom", "bob"]],
-    [["parent", "tom", "liz"]],
-    [["parent", "bob", "ann"]],
-    [["parent", "bob", "pat"]],
-    [["parent", "pat", "jim"]],
-    //
-    [["female", "pam"]],
-    [["male", "tom"]],
-    [["male", "bob"]],
-    [["female", "liz"]],
-    [["female", "pat"]],
-    [["female", "ann"]],
-    [["male", "jim"]],
-    //
-    [["mother", { "id": "X" }, { "id": "Y" }], [["parent", { "id": "X" }, { "id": "Y" }], ["female", { "id": "X" }]]],
-];
 var PrologQueryTerm = (function () {
     function PrologQueryTerm(rule, baseTerm) {
         this.constraintIndex = 0;
@@ -170,7 +152,43 @@ var PrologQuery = (function () {
     };
     return PrologQuery;
 }());
-var q = new PrologQuery(rule, [["parent", { "id": "X" }, { "id": "Y" }]]);
+var Prolog = (function () {
+    function Prolog() {
+        this.rule = [];
+    }
+    Prolog.prototype.setRule = function (rule) {
+        this.rule = rule;
+    };
+    Prolog.prototype.query = function (body) {
+        return new PrologQuery(this.rule, body);
+    };
+    return Prolog;
+}());
+module.exports = Prolog;
+var prolog = new Prolog();
+prolog.setRule([
+    [["parent", "pam", "bob"]],
+    [["parent", "tom", "bob"]],
+    [["parent", "tom", "liz"]],
+    [["parent", "bob", "ann"]],
+    [["parent", "bob", "pat"]],
+    [["parent", "pat", "jim"]],
+    //
+    [["female", "pam"]],
+    [["male", "tom"]],
+    [["male", "bob"]],
+    [["female", "liz"]],
+    [["female", "pat"]],
+    [["female", "ann"]],
+    [["male", "jim"]],
+    //
+    [["mother", { "id": "X" }, { "id": "Y" }],
+        [["parent", { "id": "X" }, { "id": "Y" }], ["female", { "id": "X" }]]],
+    [["hasachild", { "id": "X" }],
+        [["parent", { "id": "X" }, { "id": "Y" }]]],
+]);
+//var q = prolog.query([["parent", {"id": "X"}, {"id": "Y"}]]);
+var q = prolog.query([["hasachild", { "id": "X" }]]);
 //var q = new PrologQuery(rule, [["parent", {"id": "X"}, {"id": "Y"}], ["female", {"id": "X"}]]);
 //var q = new PrologQuery(rule, [["mother", {"id": "X"}, {"id": "Y"}]]);
 console.log(q.unify());

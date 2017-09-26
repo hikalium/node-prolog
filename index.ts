@@ -1,23 +1,3 @@
-var rule: any[] = 
-[
-	[["parent", "pam", "bob"]],
-	[["parent", "tom", "bob"]],
-	[["parent", "tom", "liz"]],
-	[["parent", "bob", "ann"]],
-	[["parent", "bob", "pat"]],
-	[["parent", "pat", "jim"]],
-	//
-	[["female", "pam"]],
-	[["male", "tom"]],
-	[["male", "bob"]],
-	[["female", "liz"]],
-	[["female", "pat"]],
-	[["female", "ann"]],
-	[["male", "jim"]],
-	//
-	[["mother", {"id": "X"}, {"id": "Y"}], [["parent", {"id": "X"}, {"id": "Y"}], ["female", {"id": "X"}]]],
-];
-
 class PrologQueryTerm
 {
 	baseTerm: any[];
@@ -175,7 +155,48 @@ class PrologQuery
 	}
 }
 
-var q = new PrologQuery(rule, [["parent", {"id": "X"}, {"id": "Y"}]]);
+class Prolog
+{
+	rule: any[] = [];
+	constructor(){
+		
+	}
+	setRule(rule: any[]){
+		this.rule = rule;
+	}
+	query(body: any[]){
+		return new PrologQuery(this.rule, body);
+	}
+}
+
+module.exports = Prolog;
+
+var prolog = new Prolog();
+prolog.setRule([
+	[["parent", "pam", "bob"]],
+	[["parent", "tom", "bob"]],
+	[["parent", "tom", "liz"]],
+	[["parent", "bob", "ann"]],
+	[["parent", "bob", "pat"]],
+	[["parent", "pat", "jim"]],
+	//
+	[["female", "pam"]],
+	[["male", "tom"]],
+	[["male", "bob"]],
+	[["female", "liz"]],
+	[["female", "pat"]],
+	[["female", "ann"]],
+	[["male", "jim"]],
+	//
+	[["mother", {"id": "X"}, {"id": "Y"}],
+		[["parent", {"id": "X"}, {"id": "Y"}], ["female", {"id": "X"}]]],
+	[["hasachild", {"id": "X"}],
+		[["parent", {"id": "X"}, {"id": "Y"}]]],
+]);
+
+
+//var q = prolog.query([["parent", {"id": "X"}, {"id": "Y"}]]);
+var q = prolog.query([["hasachild", {"id": "X"}]]);
 //var q = new PrologQuery(rule, [["parent", {"id": "X"}, {"id": "Y"}], ["female", {"id": "X"}]]);
 //var q = new PrologQuery(rule, [["mother", {"id": "X"}, {"id": "Y"}]]);
 console.log(q.unify());
