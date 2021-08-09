@@ -90,6 +90,13 @@ var PrologQueryTerm = (function () {
         //console.log("Failed to match: " + JSON.stringify(this.constrainedTerm));
         return false;
     };
+    PrologQueryTerm.prototype.toTraceString = function () {
+        var s = "";
+        s += JSON.stringify(this.baseTerm) + "\n";
+        s += JSON.stringify(this.constrainedTerm) + "\n";
+        s += "-> " + this.currentRuleQuery.toTraceString();
+        return s;
+    };
     return PrologQueryTerm;
 }());
 var PrologQuery = (function () {
@@ -150,6 +157,15 @@ var PrologQuery = (function () {
         //console.log("ctx: " + JSON.stringify(this.constraintStack, null, " "));
         return retv;
     };
+    PrologQuery.prototype.toTraceString = function () {
+        var s = "";
+        s += JSON.stringify(this.body);
+        for (var _i = 0, _a = this.terms; _i < _a.length; _i++) {
+            var t = _a[_i];
+            s += t.toTraceString();
+        }
+        return s;
+    };
     return PrologQuery;
 }());
 var Prolog = (function () {
@@ -165,36 +181,73 @@ var Prolog = (function () {
     return Prolog;
 }());
 module.exports = Prolog;
+/*
+class PrologInterpreter
+{
+readonly spaceChars = " \t\n";
+readonly varPrefix = "$";
+var tokens = [];
+isCodePoint
+parse(str){
+    var i = 0;
+    while(1){
+        if(str[i] === undefined) break;
+        if(~this.spaceChars.indexOf(str[i])){
+            tokens.push(["space"]);
+            i++;
+        } else{
+            var s = "";
+            for()
+        }
+    }
+}
+return tokens;
+}
+
+var inp = new PrologInterpreter();
+var res = inp.parse(`
+parent($a, $b) :- sub(0x12, a, $b)
+`);
+console.log(res);
+
+ */
+/*
+
 var prolog = new Prolog();
 prolog.setRule([
-    [["parent", "pam", "bob"]],
-    [["parent", "tom", "bob"]],
-    [["parent", "tom", "liz"]],
-    [["parent", "bob", "ann"]],
-    [["parent", "bob", "pat"]],
-    [["parent", "pat", "jim"]],
-    //
-    [["female", "pam"]],
-    [["male", "tom"]],
-    [["male", "bob"]],
-    [["female", "liz"]],
-    [["female", "pat"]],
-    [["female", "ann"]],
-    [["male", "jim"]],
-    //
-    [["mother", { "id": "X" }, { "id": "Y" }],
-        [["parent", { "id": "X" }, { "id": "Y" }], ["female", { "id": "X" }]]],
-    [["hasachild", { "id": "X" }],
-        [["parent", { "id": "X" }, { "id": "Y" }]]],
+[["parent", "pam", "bob"]],
+[["parent", "tom", "bob"]],
+[["parent", "tom", "liz"]],
+[["parent", "bob", "ann"]],
+[["parent", "bob", "pat"]],
+[["parent", "pat", "jim"]],
+//
+[["female", "pam"]],
+[["male", "tom"]],
+[["male", "bob"]],
+[["female", "liz"]],
+[["female", "pat"]],
+[["female", "ann"]],
+[["male", "jim"]],
+//
+[["mother", {"id": "X"}, {"id": "Y"}],
+    [["parent", {"id": "X"}, {"id": "Y"}], ["female", {"id": "X"}]]],
+[["hasachild", {"id": "X"}],
+    [["parent", {"id": "X"}, {"id": "Y"}]]],
+[["predecessor", {"id": "X"}, {"id": "Y"}],
+    [["parent", {"id": "X"}, {"id": "Y"}]]],
+[["predecessor", {"id": "X"}, {"id": "Z"}],
+    [["parent", {"id": "X"}, {"id": "Y"}], ["predecessor", {"id": "Y"},  {"id": "Z"}]]],
 ]);
+ */
+/*
 //var q = prolog.query([["parent", {"id": "X"}, {"id": "Y"}]]);
-var q = prolog.query([["hasachild", { "id": "X" }]]);
+//var q = prolog.query([["hasachild", {"id": "X"}]]);
+var q = prolog.query([["predecessor", "bob", {"id": "Y"}]]);
 //var q = new PrologQuery(rule, [["parent", {"id": "X"}, {"id": "Y"}], ["female", {"id": "X"}]]);
 //var q = new PrologQuery(rule, [["mother", {"id": "X"}, {"id": "Y"}]]);
 console.log(q.unify());
+console.log(q.toTraceString());
 console.log(q.unify());
 console.log(q.unify());
-console.log(q.unify());
-console.log(q.unify());
-console.log(q.unify());
-console.log(q.unify());
+ */

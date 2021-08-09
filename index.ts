@@ -93,6 +93,13 @@ class PrologQueryTerm
 		//console.log("Failed to match: " + JSON.stringify(this.constrainedTerm));
 		return false;
 	}
+	toTraceString(){
+		var s = "";
+		s += JSON.stringify(this.baseTerm) + "\n";
+		s += JSON.stringify(this.constrainedTerm) + "\n";
+		s += "-> " + this.currentRuleQuery.toTraceString()
+		return s;
+	}
 }
 
 class PrologQuery
@@ -153,6 +160,15 @@ class PrologQuery
 		//console.log("ctx: " + JSON.stringify(this.constraintStack, null, " "));
 		return retv;
 	}
+	toTraceString()
+	{
+		var s = "";
+		s += JSON.stringify(this.body);
+		for(var t of this.terms){
+			s += t.toTraceString();
+		}
+		return s;
+	}
 }
 
 class Prolog
@@ -168,8 +184,40 @@ class Prolog
 		return new PrologQuery(this.rule, body);
 	}
 }
-
 module.exports = Prolog;
+	/*
+class PrologInterpreter
+{
+	readonly spaceChars = " \t\n";
+	readonly varPrefix = "$";
+	var tokens = [];
+	isCodePoint
+	parse(str){
+		var i = 0;
+		while(1){
+			if(str[i] === undefined) break;
+			if(~this.spaceChars.indexOf(str[i])){
+				tokens.push(["space"]);
+				i++;
+			} else{
+				var s = "";
+				for()
+			}
+		}
+	}
+	return tokens;
+}
+
+var inp = new PrologInterpreter();
+var res = inp.parse(`
+	parent($a, $b) :- sub(0x12, a, $b)
+`);
+console.log(res);
+
+	 */
+
+
+	/*
 
 var prolog = new Prolog();
 prolog.setRule([
@@ -192,17 +240,21 @@ prolog.setRule([
 		[["parent", {"id": "X"}, {"id": "Y"}], ["female", {"id": "X"}]]],
 	[["hasachild", {"id": "X"}],
 		[["parent", {"id": "X"}, {"id": "Y"}]]],
+	[["predecessor", {"id": "X"}, {"id": "Y"}],
+		[["parent", {"id": "X"}, {"id": "Y"}]]],
+	[["predecessor", {"id": "X"}, {"id": "Z"}],
+		[["parent", {"id": "X"}, {"id": "Y"}], ["predecessor", {"id": "Y"},  {"id": "Z"}]]],
 ]);
+	 */
 
-
+/*
 //var q = prolog.query([["parent", {"id": "X"}, {"id": "Y"}]]);
-var q = prolog.query([["hasachild", {"id": "X"}]]);
+//var q = prolog.query([["hasachild", {"id": "X"}]]);
+var q = prolog.query([["predecessor", "bob", {"id": "Y"}]]);
 //var q = new PrologQuery(rule, [["parent", {"id": "X"}, {"id": "Y"}], ["female", {"id": "X"}]]);
 //var q = new PrologQuery(rule, [["mother", {"id": "X"}, {"id": "Y"}]]);
 console.log(q.unify());
+console.log(q.toTraceString());
 console.log(q.unify());
 console.log(q.unify());
-console.log(q.unify());
-console.log(q.unify());
-console.log(q.unify());
-console.log(q.unify());
+ */
